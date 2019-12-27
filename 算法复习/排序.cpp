@@ -7,13 +7,16 @@ void bubble(vector<int>& nums)
 {
 	int n=nums.size();
 	if(n<2)return;
-	for(int i=0;i<n-1;i++) 
+	for(int i=0;i<n-1;i++) //每次确定倒数第i位的数 
 	{
-		for(int j=0;j<n-1-i&&nums[j]>nums[j+1];j++)
+		for(int j=0;j<n-1-i;j++) 
 		{
-		//	if(nums[j]>nums[j+1])
+			if(nums[j]>nums[j+1])
 				swap(nums[j],nums[j+1]);
 		}
+		for(int h=0;h<nums.size();h++)
+			cout<<nums[h]<<" ";
+		cout<<endl;
 	}
 }
 //插入排序 时间o(n2) 空间o(1) 
@@ -58,10 +61,21 @@ void merge(vector<int>& nums,int l,int r)
 }
 
 //快速排序 o(nlogn) o(logn) 
+int partition1(vector<int>& nums, int l, int r)//荷兰国旗问题 
+{
+	int small=l-1;//小区域的边界
+	int temp=nums[r];
+	for(int i=l;i<=r;i++) 
+	{
+		if(nums[i]<=temp)
+			swap(nums[i],nums[++small]);
+	}
+	
+	return small;
+}
 int *partition(vector<int>& nums, int l, int r)//荷兰国旗问题 
 {
 	int small=l-1,big=r;//大小区域的边界
-//	cout<<l<<"  "<<r<<endl;
 	while(l<big)
 	{
 		if(nums[l]<nums[r])
@@ -72,18 +86,18 @@ int *partition(vector<int>& nums, int l, int r)//荷兰国旗问题
 			swap(nums[--big],nums[l]);
 	}
 	swap(nums[r],nums[big]);
-//	cout<<small+1<<"  "<<big<<endl;
 	return new int[2]{small+1,big};
 }
 void quick(vector<int>& nums,int l,int r)
 {
 	if(l<r)
 	{
-		int *p=partition(nums,l,r);
-		//cout<<l<<p[0]-1<<"  "<<p[1]+1<<r<<endl;
-	//	Sleep(1000);
+	/*	int *p=partition(nums,l,r);
 		quick(nums,l,p[0]-1);
-		quick(nums,p[1]+1,r);
+		quick(nums,p[1]+1,r);*/
+		int p=partition1(nums,l,r);
+		quick(nums,l,p-1);
+		quick(nums,p+1,r);
 	}
 	else return;
 }
@@ -128,13 +142,13 @@ void heap(vector<int>& nums)
 
 int main()
 {
-	vector<int> nums = {8,5,0,2,0,9,3,0,5};
+	vector<int> nums = {6,5,8,3,1,7,7,8,0,3};
 //	bubble(nums);
 //	insert(nums);
 //	merge(nums,0,nums.size()-1);
-//	quick(nums,0,nums.size()-1);
+	quick(nums,0,nums.size()-1);
 //	partition(nums,0,nums.size()-1);
-	heap(nums);
+//	heap(nums);
 	for(int h=0;h<nums.size();h++)
 		cout<<nums[h]<<endl;
 	return 0;
